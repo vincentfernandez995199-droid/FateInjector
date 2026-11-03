@@ -1,0 +1,21 @@
+name: Automated AI Build
+on: [workflow_dispatch] # Allows you to run it manually with one click
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build Fate Injector
+      run: msbuild FateInjector.sln /p:Configuration=Release /p:Platform=x64
+
+    - name: Upload Clean Executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: Clean-Fate-Injector
+        path: x64/Release/FateInjector.exe
