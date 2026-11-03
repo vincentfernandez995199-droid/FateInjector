@@ -12,6 +12,7 @@ add_subdirectory(src)
 
 SET_TARGET_PROPERTIES(fateInjector PROPERTIES LINK_FLAGS "/level='requireAdministrator' /uiAccess='false'") # requireAdministrator
 
+set(wxUSE_LIBTIFF OFF CACHE STRING "Disable TIFF support" FORCE)
 add_subdirectory(wxWidgets-3.2.0)
 
 target_link_libraries(fateInjector wx::net wx::core wx::base)
