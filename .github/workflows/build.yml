@@ -1,21 +1,26 @@
-name: Automated AI Build
-on: [workflow_dispatch]
+
+name: FateInjector CMake Build
+
+on:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-2022
+
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Setup NuGet
-      uses: nuget/setup-nuget@v2
+      - name: Configure CMake
+        run: cmake -S . -B build -A x64
 
-    - name: Restore NuGet Packages
-      run: nuget restore FateInjector.sln
+      - name: Build FateInjector
+        run: cmake --build build --config Release --parallel
 
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v2
-
-    - name: Build Fate Injector
-      run: msbuild FateInjector.sln /p:Configuration=Release /p:Platform=x64 /p:MissingDependencies=true
+      - name: Upload Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: FateInjector-Build
+          path: build/Release/fateInjector.exe
+          if-no-files-found: error
